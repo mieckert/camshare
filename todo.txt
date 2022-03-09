@@ -1,5 +1,11 @@
-- Setup express Server and ngrok
-- Add query parameters to search for "right" camera
-- start camera stream, check for layout issues?
-- add overlay of small camera
-- play with getDisplayMedia (https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia) for screen sharing
+- add favicon
+- remove audio stream?
+- add way to switch camera (server side? -- need to think what's the best way...)
+  remember to step track/stream? (cf. webcamshare example)
+- add way to switch resolution
+- control focus (locally through libuvc etc.)
+- Set cookie to "store" right camera? (or other use of local storage)
+- play with getDisplayMedia  for screen sharing
+  (https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia)
+- add overlay of small camera -- play with turning it into a circle
+- autostart etc. ngrok for development
