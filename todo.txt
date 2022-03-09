@@ -1,0 +1,5 @@
+- Setup express Server and ngrok
+- Add query parameters to search for "right" camera
+- start camera stream, check for layout issues?
+- add overlay of small camera
+- play with getDisplayMedia (https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia) for screen sharing

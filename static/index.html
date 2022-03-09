@@ -1,0 +1,122 @@
+<html>
+
+<head>
+    <title>Heroku Pipelines</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #36373A;
+        }
+
+        #videoWrapper {
+            position: relative;
+        }
+
+        #mainVideo {
+            width: 177vh; /* 16:9 = 1.77; so we take the view height (100vh) * 1.77 as width */            
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }       
+
+        #secondVideo {
+            width: 17.7vh;
+            height: 10vh;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .region {
+            position: absolute; z-index: 1; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="videoWrapper">
+        <video id="mainVideo" muted>        
+        </video>
+
+        <video id="secondVideo" muted>        
+        </video>
+    </div>
+</body>
+
+<script>
+if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+    console.log("enumerateDevices() not supported.");    
+}
+
+(async () => {
+    try {
+        let params = (new URL(document.location)).searchParams;
+        let mainCamSearchParam = params.get('main') || 'JOURIST';
+        console.log(`mainCamSearchParam = ${mainCamSearchParam}`)
+        let mainAudioSearchParam = params.get('audio') || 'Default';
+        console.log(`mainAudioSearchParam = ${mainAudioSearchParam}`)
+
+        //let secondCamSearchParam = params.get('main') || 'Logi';
+        //console.log(`secondCamSearchParam = ${secondCamSearchParam}`)
+
+        let result = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        console.log("result = ");
+        console.log(result);
+        let devices = await navigator.mediaDevices.enumerateDevices();
+        console.log(devices);
+        devices.forEach( (device) => {
+            console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
+        });
+
+        const mainCamDevice = devices.find( (device) => device.kind == 'videoinput' && device.label.includes(mainCamSearchParam) );
+        console.log(`Using as main camera: ${mainCamDevice.label}`);
+        const mainAudioDevice = devices.find( (device) => device.kind == 'audioinput' && device.label.includes(mainAudioSearchParam) );
+        console.log(`Using as main audio: ${mainAudioDevice.label}`);
+        //const secondCamDevice = devices.find( (device) => device.kind == 'videoinput' && device.label.includes(secondCamSearchParam) );
+        //console.log(`Using as main camera: ${secondCamDevice.label}`);
+
+
+        const mainStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                deviceId: {exact: mainAudioDevice.deviceId}
+            },
+            video: {
+                deviceId: {exact: mainCamDevice.deviceId}
+            }  
+        });                  
+        console.log(mainStream);
+
+        const mainVideoElem = document.getElementById('mainVideo');
+        console.log(mainVideoElem);
+        mainVideoElem.srcObject = mainStream;
+        mainVideoElem.play();
+
+        /*
+        const secondStream = await navigator.mediaDevices.getUserMedia({            
+            video: {
+                deviceId: {exact: secondCamDevice.deviceId}
+            }  
+        });                  
+        console.log(secondStream);
+
+        const secondVideoElem = document.getElementById('secondVideo');
+        console.log(secondVideoElem);
+        secondVideoElem.srcObject = secondStream;
+        secondVideoElem.play();
+        */
+    }
+    catch(err) {
+        console.log(err.name + ": " + err.message);
+    }
+})();
+</script>
+</html>
