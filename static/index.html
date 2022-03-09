@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Heroku Pipelines</title>
+    <title>CamShare</title>
     <style>
         * {
             margin: 0;
@@ -90,6 +90,7 @@ if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
                 deviceId: {exact: mainAudioDevice.deviceId}
             },
             video: {
+                width: 1280, height: 720,
                 deviceId: {exact: mainCamDevice.deviceId}
             }  
         });                  
